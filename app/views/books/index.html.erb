@@ -1,16 +1,46 @@
-<p style="color: green"><%= notice %></p>
+<!-- Header -->
+<div class="row">
+  <div class="col-12">
+    <h1 class="mb-4">Library Books</h1>
+  </div>
+</div>
 
-<% content_for :title, "Books" %>
-
-<h1>Books</h1>
-
-<div id="books">
+<!--Cards-->
+<div class="row row-cols-1 row-cols-md-3 g-4">
   <% @books.each do |book| %>
-    <%= render book %>
-    <p>
-      <%= link_to "Show this book", book %>
-    </p>
+    <div class="col">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title"><%= book.title %></h5>
+          <h6 class="card-subtitle mb-2 text-muted"><%= book.author %></h6>
+          <p class="card-text"><%= book.description %></p>
+          
+          <% if book.currently_borrowed? %>
+            <div class="book-status borrowed">
+              <i class="bi bi-bookmark-x"></i> Currently Borrowed
+            </div>
+          <% else %>
+            <div class="book-status available">
+              <i class="bi bi-bookmark-check"></i> Available
+            </div>
+          <% end %>
+          
+          <div class="mt-3">
+            <%= link_to book_path(book), class: "btn btn-primary" do %>
+              <i class="bi bi-eye"></i> View Details
+            <% end %>
+            <%= link_to edit_book_path(book), class: "btn btn-outline-primary" do %>
+              <i class="bi bi-pencil"></i> Edit
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
   <% end %>
 </div>
 
-<%= link_to "New book", new_book_path %>
+<div class="mt-4">
+  <%= link_to new_book_path, class: "btn btn-success" do %>
+    <i class="bi bi-plus-lg"></i> Add New Book
+  <% end %>
+</div>

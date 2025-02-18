@@ -11,7 +11,12 @@ class LoansController < ApplicationController
   # end
 
   def borrower_history
-    @borrower_name = params[:name]
+    @borrower_name = params[:borrower_name]
     @loans = Loan.where(borrower_name: @borrower_name).order(borrowed_on: :desc)
+    
+    if @loans.empty?
+      flash[:alert] = "No loans found for borrower '#{@borrower_name}'"
+      redirect_to loans_path
+    end
   end
 end

@@ -1,60 +1,79 @@
-<p style="color: green"><%= notice %></p>
+<div class="row">
+  <div class="col-md-8 mx-auto">
+    <div class="card mb-4">
+      <div class="card-body">
+        <h1 class="card-title"><%= @book.title %></h1>
+        <h6 class="card-subtitle mb-3 text-muted">by <%= @book.author %></h6>
+        
+        <% if @book.currently_borrowed? %>
+          <div class="book-status borrowed">
+            <i class="bi bi-bookmark-x"></i> This book is currently borrowed
+          </div>
+        <% else %>
+          <div class="book-status available">
+            <i class="bi bi-bookmark-check"></i> Available for borrowing
+          </div>
+        <% end %>
 
-<%= render @book %>
+        <p class="card-text"><%= @book.description %></p>
 
-<p>
-  <strong>Status:</strong>
-  <%= @book.currently_borrowed? ? "Borrowed" : "Available" %>
-</p>
+        <div class="mt-3">
+          <%= link_to edit_book_path(@book), class: "btn btn-outline-primary" do %>
+            <i class="bi bi-pencil"></i> Edit
+          <% end %>
+          <%= link_to book_path(@book), 
+              data: { turbo_method: :delete, turbo_confirm: "Are you sure?" },
+              class: "btn btn-outline-danger" do %>
+            <i class="bi bi-trash"></i> Delete
+          <% end %>
+          <%= link_to books_path, class: "btn btn-outline-secondary" do %>
+            <i class="bi bi-arrow-left"></i> Back to Books
+          <% end %>
+        </div>
+      </div>
+    </div>
 
-<div>
-  <%= link_to "Edit this book", edit_book_path(@book) %> |
-  <%= link_to "Back to books", books_path %>
-
-  <%= button_to "Delete this book", @product, method: :delete, data: { turbo_confirm: "Are you sure?" } %>
-</div>
-
-<!-- Borrowing HISTORY -->
-<h3>Borrowing History</h3>
-<table>
-  <% @book.loans.each do |loan| %>
-    <tr>
-      <td><%= loan.borrower_name %></td>
-      <td><%= loan.borrowed_on %></td>
-      <td><%= loan.returned_on || 'Not returned' %></td>
-    </tr>
-  <% end %>
-</table>
-
-<%#= form_tag borrow_book_path(@book), method: :post do %>
-<%#= text_field_tag :borrower_name, nil, placeholder: 'Enter your name' %>
-<%#= submit_tag 'Borrow Book' %>
-<%# end %>
-
-<%= form_tag borrow_book_path(@book), method: :post do %>
-  <%= text_field_tag :borrower_name, nil, placeholder: "Your name", required: true %>
-  <%= submit_tag "Borrow Book" %>
-<% end %>
-
-  <%= button_to 'Return Book', return_book_path(@book), method: :patch %>
-
-  <h2>Borrowing History</h2>
-  <table>
-    <thead>
-    <tr>
-      <th>Borrower</th>
-      <th>Borrowed On</th>
-      <th>Returned On</th>
-    </tr>
-    </thead>
-    <tbody>
-    <% @loans.each do |loan| %>
-      <tr>
-        <td><%= loan.borrower_name %></td>
-        <td><%= loan.borrowed_on.strftime("%Y-%m-%d") %></td>
-        <td><%= loan.returned_on&.strftime("%Y-%m-%d") || "Not returned" %></td>
-      </tr>
+    <% unless @book.currently_borrowed? %>
+      <div class="card mb-4">
+        <div class="card-body">
+          <h4 class="card-title">Borrow this book</h4>
+          <%= form_tag borrow_book_path(@book), method: :post, class: "mt-3" do %>
+            <div class="mb-3">
+              <%= label_tag :borrower_name, "Your Name", class: "form-label" %>
+              <%= text_field_tag :borrower_name, nil, class: "form-control", required: true %>
+            </div>
+            <%= submit_tag "Borrow Book", class: "btn btn-primary" %>
+          <% end %>
+        </div>
+      </div>
     <% end %>
-    </tbody>
-  </table>
-<%# end %>
+
+    <div class="loan-history">
+      <h3>Loan History</h3>
+      <% if @loans.any? %>
+        <% @loans.each do |loan| %>
+          <div class="loan-item">
+            <%= link_to borrower_history_path(borrower_name: loan.borrower_name), class: "borrower-link" do %>
+              <i class="bi bi-person"></i> <%= loan.borrower_name %>
+            <% end %>
+            <div class="text-muted">
+              <small>
+                Borrowed: <%= loan.borrowed_on.strftime("%B %d, %Y") %>
+                <% if loan.returned_on %>
+                  | Returned: <%= loan.returned_on.strftime("%B %d, %Y") %>
+                <% else %>
+                  | Currently borrowed
+                  <% if @book.currently_borrowed? && loan == @loans.first %>
+                    <%= button_to "Return Book", return_book_path(@book), method: :post, class: "btn btn-sm btn-success mt-2" %>
+                  <% end %>
+                <% end %>
+              </small>
+            </div>
+          </div>
+        <% end %>
+      <% else %>
+        <p class="text-muted">No loan history available</p>
+      <% end %>
+    </div>
+  </div>
+</div>

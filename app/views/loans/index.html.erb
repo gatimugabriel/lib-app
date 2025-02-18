@@ -1,27 +1,64 @@
-<h1>All Loans</h1>
+<div class="row">
+  <div class="col-12">
+    <h1 class="mb-4">All Loans</h1>
 
-<%= form_tag borrower_history_path, method: :get do %>
-  <%= text_field_tag :name, params[:name], placeholder: "Enter borrower name" %>
-  <%= submit_tag "Search Borrower History" %>
-<% end %>
+    <div class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title">Search Borrower History</h5>
+        <%= form_tag borrower_history_path, method: :get, class: "row g-3" do %>
+          <div class="col-auto">
+            <%= text_field_tag :borrower_name, params[:borrower_name], 
+                class: "form-control", 
+                placeholder: "Enter borrower name" %>
+          </div>
+          <div class="col-auto">
+            <%= submit_tag "Search", class: "btn btn-primary" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
 
-<table>
-  <thead>
-  <tr>
-    <th>Book Title</th>
-    <th>Borrower Name</th>
-    <th>Borrowed On</th>
-    <th>Returned On</th>
-  </tr>
-  </thead>
-  <tbody>
-  <% @loans.each do |loan| %>
-    <tr>
-      <td><%= loan.book.title %></td>
-      <td><%= loan.borrower_name %></td>
-      <td><%= loan.borrowed_on.strftime("%Y-%m-%d") %></td>
-      <td><%= loan.returned_on&.strftime("%Y-%m-%d") || "Not returned" %></td>
-    </tr>
-  <% end %>
-  </tbody>
-</table>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Book</th>
+            <th>Borrower</th>
+            <th>Borrowed On</th>
+            <th>Returned On</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @loans.each do |loan| %>
+            <tr>
+              <td>
+                <%= link_to loan.book.title, book_path(loan.book), class: "text-decoration-none" %>
+              </td>
+              <td>
+                <%= link_to loan.borrower_name, 
+                            borrower_history_path(borrower_name: loan.borrower_name),
+                    class: "borrower-link" %>
+              </td>
+              <td><%= loan.borrowed_on.strftime("%B %d, %Y") %></td>
+              <td>
+                <% if loan.returned_on %>
+                  <%= loan.returned_on.strftime("%B %d, %Y") %>
+                <% else %>
+                  <span class="badge bg-warning text-dark">Not returned</span>
+                <% end %>
+              </td>
+              <td>
+                <% if loan.returned_on %>
+                  <span class="badge bg-success">Returned</span>
+                <% else %>
+                  <span class="badge bg-primary">Active</span>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
