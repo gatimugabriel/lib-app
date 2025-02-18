@@ -23,6 +23,16 @@
   </head>
 
   <body>
+  <div class="notice"><%= notice %></div>
+  <nav>
+    <%= link_to "Home", root_path %>
+    <%= link_to "New Book", new_book_path  %>
+    <%= link_to "Loans", borrower_history_path  %>
+  </nav>
+
+  <main>
     <%= yield %>
+  </main>
+
   </body>
 </html>
