@@ -1,0 +1,13 @@
+<h1>Borrowing History for <%= @borrower_name %></h1>
+
+<%= link_to "Back to All Loans", loans_path %>
+
+<table>
+  <% @loans.each do |loan| %>
+    <tr>
+      <td><%= loan.book.title %></td>
+      <td><%= loan.borrowed_on %></td>
+      <td><%= loan.returned_on || 'Not returned' %></td>
+    </tr>
+  <% end %>
+</table>

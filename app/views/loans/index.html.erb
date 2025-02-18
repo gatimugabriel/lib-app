@@ -1,0 +1,27 @@
+<h1>All Loans</h1>
+
+<%= form_tag borrower_history_path, method: :get do %>
+  <%= text_field_tag :name, params[:name], placeholder: "Enter borrower name" %>
+  <%= submit_tag "Search Borrower History" %>
+<% end %>
+
+<table>
+  <thead>
+  <tr>
+    <th>Book Title</th>
+    <th>Borrower Name</th>
+    <th>Borrowed On</th>
+    <th>Returned On</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @loans.each do |loan| %>
+    <tr>
+      <td><%= loan.book.title %></td>
+      <td><%= loan.borrower_name %></td>
+      <td><%= loan.borrowed_on.strftime("%Y-%m-%d") %></td>
+      <td><%= loan.returned_on&.strftime("%Y-%m-%d") || "Not returned" %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
