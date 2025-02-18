@@ -1,0 +1,60 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @book %>
+
+<p>
+  <strong>Status:</strong>
+  <%= @book.currently_borrowed? ? "Borrowed" : "Available" %>
+</p>
+
+<div>
+  <%= link_to "Edit this book", edit_book_path(@book) %> |
+  <%= link_to "Back to books", books_path %>
+
+  <%= button_to "Delete this book", @product, method: :delete, data: { turbo_confirm: "Are you sure?" } %>
+</div>
+
+<!-- Borrowing HISTORY -->
+<h3>Borrowing History</h3>
+<table>
+  <% @book.loans.each do |loan| %>
+    <tr>
+      <td><%= loan.borrower_name %></td>
+      <td><%= loan.borrowed_on %></td>
+      <td><%= loan.returned_on || 'Not returned' %></td>
+    </tr>
+  <% end %>
+</table>
+
+<%#= form_tag borrow_book_path(@book), method: :post do %>
+<%#= text_field_tag :borrower_name, nil, placeholder: 'Enter your name' %>
+<%#= submit_tag 'Borrow Book' %>
+<%# end %>
+
+<%= form_tag borrow_book_path(@book), method: :post do %>
+  <%= text_field_tag :borrower_name, nil, placeholder: "Your name", required: true %>
+  <%= submit_tag "Borrow Book" %>
+<% end %>
+
+  <%= button_to 'Return Book', return_book_path(@book), method: :patch %>
+
+  <h2>Borrowing History</h2>
+  <table>
+    <thead>
+    <tr>
+      <th>Borrower</th>
+      <th>Borrowed On</th>
+      <th>Returned On</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @loans.each do |loan| %>
+      <tr>
+        <td><%= loan.borrower_name %></td>
+        <td><%= loan.borrowed_on.strftime("%Y-%m-%d") %></td>
+        <td><%= loan.returned_on&.strftime("%Y-%m-%d") || "Not returned" %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+<%# end %>
