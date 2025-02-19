@@ -5,7 +5,19 @@ class BooksController < ApplicationController
 
   # GET /books or /books.json
   def index
-    @books = Book.all
+    # send a flash message if no match found with given search query
+    @books = if params[:search_query].present?
+               books = Book.where("lower(title) LIKE ? OR lower(author) LIKE ?",
+                                  "%#{params[:search_query].downcase}%",
+                                  "%#{params[:search_query].downcase}%")
+
+               if books.empty?
+                 flash[:alert] = "No books/author found matching '#{params[:search_query]}'"
+               end
+               books
+    else
+               Book.all
+    end
   end
 
   # GET /books/1 or /books/1.json
@@ -125,7 +137,6 @@ class BooksController < ApplicationController
     end
   end
 
-
   private
 
   def set_book
@@ -134,6 +145,6 @@ class BooksController < ApplicationController
 
   # trusted parameters
   def book_params
-    params.expect(book: [ :title, :author, :description ])
+    params.expect(book: [:title, :author, :description])
   end
 end

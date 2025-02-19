@@ -18,6 +18,37 @@ body {
     padding-bottom: 2rem;
 }
 
+.search-bar {
+    background-color: #fff;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
+
+.search-bar .form-control {
+    border-radius: 0.25rem;
+}
+
+.flash-warning {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
+    padding: 12px;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+}
+
+.position-relative {
+    position: relative;
+}
+
+.clear-search:hover {
+    color: #666 !important;
+    cursor: pointer;
+}
+
+
 .card {
     border: none;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);

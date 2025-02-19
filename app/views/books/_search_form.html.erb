@@ -1,0 +1,41 @@
+<div class="search-bar mb-4">
+  <%= form_tag books_path, method: :get, class: "d-flex" do %>
+    <div class="position-relative flex-grow-1">
+      <%= text_field_tag :search_query, params[:search_query],
+                         class: "form-control me-2 search-input-field",
+                         placeholder: "Search by title or author..." %>
+
+      <% if params[:search_query].present? %>
+<!--        <button type="button"-->
+<!--                class="btn btn-link position-absolute end-0 top-50 translate-middle-y text-secondary clear-search"-->
+<!--                style="text-decoration: none;">-->
+<!--          <i class="fas fa-times"></i>-->
+<!--        </button>-->
+
+<!--        <button type="button"-->
+<!--                class="btn btn-link position-absolute end-0 top-50 translate-middle-y text-secondary clear-search"-->
+<!--                style="text-decoration: none;">-->
+<!--          ×-->
+<!--        </button>-->
+
+    <% end %>
+    </div>
+    <%= submit_tag "Search", class: "btn btn-primary" %>
+  <% end %>
+</div>
+
+<%= javascript_tag do %>
+  document.addEventListener('DOMContentLoaded', function() {
+  const clearButton = document.querySelector('.clear-search');
+  const searchInput = document.querySelector('.search-input-field');
+  if (clearButton) {
+  clearButton.addEventListener('click', function() {
+    searchInput.value = ""
+    console.log("Value")
+    console.log(searchInput.innerHTML.value)
+    console.log(searchInput.value)
+    window.location.href = '<%= books_path %>';
+  })
+  }
+  });
+<% end %>
