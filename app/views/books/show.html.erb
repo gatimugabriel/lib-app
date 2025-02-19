@@ -4,6 +4,11 @@
       <div class="card-body">
         <h1 class="card-title"><%= @book.title %></h1>
         <h6 class="card-subtitle mb-3 text-muted">by <%= @book.author %></h6>
+        <h5><%= @book.isbn %></h5>
+        <p>
+          <strong>Image:</strong>
+          <%= image_tag @book.image_url, alt: @book.title, style: "max-width: 300px;" if @book.image_url.present? %>
+        </p>
 
         <% if @book.currently_borrowed? %>
           <div class="book-status borrowed">
