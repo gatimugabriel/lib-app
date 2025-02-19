@@ -7,4 +7,12 @@ class Book < ApplicationRecord
   def currently_borrowed?
     loans.exists?(returned_on: nil)
   end
+
+  def upload_image(file)
+    return if file.blank?
+
+    # upload to cloudinary
+    response = Cloudinary::Uploader.upload(file, public_id: "books/#{isbn}")
+    self.image_url = response["secure_url"]
+  end
 end

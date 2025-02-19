@@ -38,6 +38,11 @@ class BooksController < ApplicationController
   def create
     @book = Book.new(book_params)
 
+    # upload image
+    if params[:book][:image].present?
+      @book.upload_image(params[:book][:image])
+    end
+
     respond_to do |format|
       if @book.save
         format.html { redirect_to books_path, notice: "Book was successfully created." } # Redirect to books index
@@ -51,6 +56,11 @@ class BooksController < ApplicationController
 
   # PATCH/PUT /books/1 or /books/1.json
   def update
+    # Handle image upload
+    if params[:book][:image].present?
+      @book.upload_image(params[:book][:image])
+    end
+
     respond_to do |format|
       if @book.update(book_params)
         format.html { redirect_to @book, notice: "Book was successfully updated." }
@@ -143,8 +153,13 @@ class BooksController < ApplicationController
     @book = Book.find(params.expect(:id))
   end
 
+  # get book by isbn
+  def set_book_by_isbn
+    @book = Book.find_by(isbn: params[:isbn])
+  end
+
   # trusted parameters
   def book_params
-    params.expect(book: [:title, :author, :description])
+    params.expect(book: [:title, :author, :description, :isbn, :image_url])
   end
 end
