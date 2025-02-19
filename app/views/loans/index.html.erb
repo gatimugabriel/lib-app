@@ -2,14 +2,15 @@
   <div class="col-12">
     <h1 class="mb-4">All Loans</h1>
 
-    <div class="card mb-4">
+    <!--    Search Input-->
+    <div class="mb-4">
       <div class="card-body">
         <h5 class="card-title">Search Borrower History</h5>
         <%= form_tag borrower_history_path, method: :get, class: "row g-3" do %>
           <div class="col-auto">
-            <%= text_field_tag :borrower_name, params[:borrower_name], 
-                class: "form-control", 
-                placeholder: "Enter borrower name" %>
+            <%= text_field_tag :borrower_name, params[:borrower_name],
+                               class: "form-control",
+                               placeholder: "Enter borrower name" %>
           </div>
           <div class="col-auto">
             <%= submit_tag "Search", class: "btn btn-primary" %>
@@ -21,42 +22,48 @@
     <div class="table-responsive">
       <table class="table">
         <thead>
-          <tr>
-            <th>Book</th>
-            <th>Borrower</th>
-            <th>Borrowed On</th>
-            <th>Returned On</th>
-            <th>Status</th>
-          </tr>
+        <tr>
+          <th>ISBN</th>
+          <th>Book</th>
+          <th>Borrower</th>
+          <th>Borrowed On</th>
+          <th>Returned On</th>
+          <th>Status</th>
+        </tr>
         </thead>
         <tbody>
-          <% @loans.each do |loan| %>
-            <tr>
-              <td>
-                <%= link_to loan.book.title, book_path(loan.book), class: "text-decoration-none" %>
-              </td>
-              <td>
-                <%= link_to loan.borrower_name, 
-                            borrower_history_path(borrower_name: loan.borrower_name),
-                    class: "borrower-link" %>
-              </td>
-              <td><%= loan.borrowed_on.strftime("%B %d, %Y") %></td>
-              <td>
-                <% if loan.returned_on %>
-                  <%= loan.returned_on.strftime("%B %d, %Y") %>
-                <% else %>
-                  <span class="badge bg-warning text-dark">Not returned</span>
-                <% end %>
-              </td>
-              <td>
-                <% if loan.returned_on %>
-                  <span class="badge bg-success">Returned</span>
-                <% else %>
-                  <span class="badge bg-primary">Active</span>
-                <% end %>
-              </td>
-            </tr>
-          <% end %>
+        <% @loans.each do |loan| %>
+          <tr>
+
+            <!--              TODO: UPDATE data to use ISBN     -->
+            <td>
+              <%= link_to loan.book.title, book_path(loan.book), class: "text-decoration-none" %>
+            </td>
+            <td>
+              <%= link_to loan.book.title, book_path(loan.book), class: "text-decoration-none" %>
+            </td>
+            <td>
+              <%= link_to loan.borrower_name,
+                          borrower_history_path(borrower_name: loan.borrower_name),
+                          class: "borrower-link" %>
+            </td>
+            <td><%= loan.borrowed_on.strftime("%B %d, %Y") %></td>
+            <td>
+              <% if loan.returned_on %>
+                <%= loan.returned_on.strftime("%B %d, %Y") %>
+              <% else %>
+                <span class="badge bg-warning text-dark">Not returned</span>
+              <% end %>
+            </td>
+            <td>
+              <% if loan.returned_on %>
+                <span class="badge bg-success">Returned</span>
+              <% else %>
+                <span class="badge bg-primary">Active</span>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
         </tbody>
       </table>
     </div>

@@ -4,7 +4,7 @@
       <div class="card-body">
         <h1 class="card-title"><%= @book.title %></h1>
         <h6 class="card-subtitle mb-3 text-muted">by <%= @book.author %></h6>
-        
+
         <% if @book.currently_borrowed? %>
           <div class="book-status borrowed">
             <i class="bi bi-bookmark-x"></i> This book is currently borrowed
@@ -21,9 +21,9 @@
           <%= link_to edit_book_path(@book), class: "btn btn-outline-primary" do %>
             <i class="bi bi-pencil"></i> Edit
           <% end %>
-          <%= link_to book_path(@book), 
-              data: { turbo_method: :delete, turbo_confirm: "Are you sure?" },
-              class: "btn btn-outline-danger" do %>
+          <%= link_to book_path(@book),
+                      data: { turbo_method: :delete, turbo_confirm: "Are you sure?" },
+                      class: "btn btn-outline-danger" do %>
             <i class="bi bi-trash"></i> Delete
           <% end %>
           <%= link_to books_path, class: "btn btn-outline-secondary" do %>

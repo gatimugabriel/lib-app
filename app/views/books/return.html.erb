@@ -1,0 +1,49 @@
+<%= content_for :title, "Return #{@book.title}" %>
+
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header">
+      <h2>Return Book: <%= @book.title %></h2>
+    </div>
+
+    <div class="card-body">
+      <%= form_tag return_book_path(@book), method: :patch do %>
+        <div class="mb-4">
+          <label class="form-label">Please enter your name to confirm return:</label>
+          <%= text_field_tag :returner_name, nil, class: "form-control", required: true %>
+        </div>
+
+        <% if @book.currently_borrowed? %>
+          <% loan = @book.loans.where(returned_on: nil).last %>
+          <% if loan %>
+            <div class="alert alert-info">
+              <h4>Loan Details</h4>
+              <p><strong>Borrowed by:</strong> <%= loan.borrower_name %></p>
+              <p><strong>Borrowed on:</strong> <%= loan.borrowed_on.strftime("%B %d, %Y") %></p>
+              <!--              <p><strong>Due date:</strong> <%#= loan.due_date.strftime("%B %d, %Y") %></p>-->
+              <p><strong>Due date:</strong> <%=  Time.current.strftime("%B %d, %Y") %></p>
+
+              <%# if Time.current > loan.due_date %>
+              <% if Time.current %>
+                <div class="alert alert-warning">
+                  <h5>Late Return Notice</h5>
+                  <p>This book is overdue. Late fees will apply.</p>
+                  <!--                  <p><strong>Days overdue:</strong> <%#= (Time.current.to_date - loan.due_date.to_date).to_i %></p>-->
+                  <p><strong>Days overdue:</strong> 4 </p>
+                  <!--                  <p><strong>Estimated penalty:</strong> $<%#= ((Time.current.to_date - loan.due_date.to_date).to_i * 0.50).round(2) %></p>-->
+                  <p><strong>Estimated penalty:</strong> $2 </p>
+                  <small class="text-muted">Late fees are charged at $0.50 per day</small>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        <% end %>
+
+        <div class="mt-3">
+          <%= submit_tag "Confirm Return", class: "btn btn-primary" %>
+          <%= link_to "Back", book_path(@book), class: "btn btn-secondary" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
