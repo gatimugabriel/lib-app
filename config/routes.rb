@@ -2,11 +2,11 @@ Rails.application.routes.draw do
   resources :books do
     member do
       post :borrow
+      get :return
       patch :return
     end
   end
 
-  # get "/borrowers/:name", to: "loans#borrower_history", as: "borrower_history"
   get "/borrower_history", to: "loans#borrower_history", as: "borrower_history"
   resources :loans, only: [ :index ]
 

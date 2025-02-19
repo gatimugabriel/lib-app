@@ -42,8 +42,8 @@ class BooksController < ApplicationController
         format.html { redirect_to @book, notice: "Book was successfully updated." }
         format.json { render :show, status: :ok, location: @book }
       else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @book.errors, status: :unprocessable_entity }
+        format.html { render :edit, status: :unprocessable_content }
+        format.json { render json: @book.errors, status: :unprocessable_content }
       end
     end
   end
@@ -60,10 +60,7 @@ class BooksController < ApplicationController
 
   # Book LOANs
   def borrow
-    @book = Book.find(params[:id])
-
-    puts "Book: #{@book.inspect}"
-    puts "Params: #{params.inspect}"
+    @book = set_book
 
     # Prevent borrowing if book is already borrowed
     if @book.currently_borrowed?
@@ -79,39 +76,62 @@ class BooksController < ApplicationController
     if loan.save
       redirect_to @book, notice: "Book borrowed successfully!"
     else
-      puts "Loan errors: #{loan.errors.full_messages}"
+      puts "Borrowing errors: #{loan.errors.full_messages}"
       redirect_to @book, alert: loan.errors.full_messages.to_sentence
     end
   end
 
   def return
-    @book = Book.find(params[:id])
+    @book = set_book
 
-    # Debugging: Print book and loans
-    puts "Book: #{@book.inspect}"
-    puts "Loans: #{@book.loans.inspect}"
+    if params[:returner_name].blank?
+      @loan = @book.loans.where(returned_on: nil).last
+      render :return
+      return
+    end
 
     loan = @book.loans.where(returned_on: nil).last
 
-    if loan&.update(returned_on: Time.current)
-      redirect_to @book, notice: "Book successfully returned!"
+    if loan.nil?
+      redirect_to @book, alert: "This book is not currently borrowed!"
+      return
+    end
+
+    # Verify returner name matches borrower name
+    if params[:returner_name].downcase != loan.borrower_name.downcase
+      redirect_to return_book_path(@book), alert: "The returner's name must match the borrower's name!"
+      return
+    end
+
+    loan.returned_on = Time.current
+
+    # Calculate penalty if book is overdue
+    # days_overdue = (Time.current.to_date - loan.due_date.to_date).to_i
+    days_overdue = 4
+    if days_overdue > 0
+      penalty_amount = (days_overdue * 0.50).round(2)
+      # SIMULATED: the penalty is added to user's financial account
+      notice = "Book has been successfully returned! A penalty of $#{penalty_amount} has been added to your(#{loan.borrower_name}) account."
     else
-      redirect_to @book, alert: "No active loan found"
+      notice = "Book has been successfully returned!"
+    end
+
+    if loan.save
+      redirect_to books_path, notice: notice
+    else
+      redirect_to return_book_path(@book), alert: loan.errors.full_messages.to_sentence
     end
   end
+
 
   private
 
   def set_book
-    @book = Book.find(params.require(:id))
+    @book = Book.find(params.expect(:id))
   end
 
-  # Only allow a list of trusted parameters through.
-  def book_params2
-    params.expect(book: [:title, :author, :description])
-  end
-
+  # trusted parameters
   def book_params
-    params.require(:book).permit(:title, :author, :description)
+    params.expect(book: [ :title, :author, :description ])
   end
 end

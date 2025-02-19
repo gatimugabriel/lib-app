@@ -49,7 +49,7 @@
     <% end %>
 
     <div class="loan-history">
-      <h3>Loan History</h3>
+      <h3>Borrowing History</h3>
       <% if @loans.any? %>
         <% @loans.each do |loan| %>
           <div class="loan-item">
@@ -64,7 +64,7 @@
                 <% else %>
                   | Currently borrowed
                   <% if @book.currently_borrowed? && loan == @loans.first %>
-                    <%= button_to "Return Book", return_book_path(@book), method: :post, class: "btn btn-sm btn-success mt-2" %>
+                    <%= link_to "Return Book", return_book_path(@book), class: "btn btn-sm btn-success mt-2" %>
                   <% end %>
                 <% end %>
               </small>
