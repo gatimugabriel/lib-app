@@ -4,9 +4,9 @@
       <div class="card-body">
         <h1 class="card-title"><%= @book.title %></h1>
         <h6 class="card-subtitle mb-3 text-muted">by <%= @book.author %></h6>
-        <h5><%= @book.isbn %></h5>
+        <p><b>ISBN:</b> <%= @book.isbn %></p>
         <p>
-          <strong>Image:</strong>
+<!--          <strong>Image:</strong>-->
           <%= image_tag @book.image_url, alt: @book.title, style: "max-width: 300px;" if @book.image_url.present? %>
         </p>
 
@@ -46,6 +46,8 @@
             <div class="mb-3">
               <%= label_tag :borrower_name, "Your Name", class: "form-label" %>
               <%= text_field_tag :borrower_name, nil, class: "form-control", required: true %>
+              <%#= date_field_tag :due_date, 14.days.from_now.to_date %>
+              <p><i>Book is given for <b>14</b> days, after which penalty may apply</i></p>
             </div>
             <%= submit_tag "Borrow Book", class: "btn btn-primary" %>
           <% end %>

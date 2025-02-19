@@ -29,6 +29,8 @@
           <th>Borrowed On</th>
           <th>Returned On</th>
           <th>Status</th>
+          <th>Due Date</th>
+
         </tr>
         </thead>
         <tbody>
@@ -37,7 +39,7 @@
 
             <!--              TODO: UPDATE data to use ISBN     -->
             <td>
-              <%= link_to loan.book.title, book_path(loan.book), class: "text-decoration-none" %>
+              <%= link_to loan.book.isbn, book_path(loan.book), class: "text-decoration-none" %>
             </td>
             <td>
               <%= link_to loan.book.title, book_path(loan.book), class: "text-decoration-none" %>
@@ -62,6 +64,13 @@
                 <span class="badge bg-primary">Active</span>
               <% end %>
             </td>
+            <td>
+              <% if loan.returned_on %>
+                <span>-</span>
+              <% else %>
+                <%= loan.due_date.strftime("%B %d, %Y") %></td>
+              <% end %>
+
           </tr>
         <% end %>
         </tbody>

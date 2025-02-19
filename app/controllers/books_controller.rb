@@ -77,7 +77,7 @@ class BooksController < ApplicationController
     @book.destroy
 
     respond_to do |format|
-      format.html { redirect_to books_path, status: :see_other, notice: "Book was successfully destroyed." }
+      format.html { redirect_to books_path, status: :see_other, notice: "Book was successfully deleted." }
       format.json { head :no_content }
     end
   end
@@ -94,7 +94,8 @@ class BooksController < ApplicationController
 
     loan = @book.loans.build(
       borrower_name: params[:borrower_name],
-      borrowed_on: Time.current
+      borrowed_on: Time.current,
+      due_date: params[:due_date] || 14.days.from_now
     )
 
     if loan.save
@@ -107,6 +108,7 @@ class BooksController < ApplicationController
 
   def return
     @book = set_book
+    loan = @book.loans.where(returned_on: nil).last
 
     if params[:returner_name].blank?
       @loan = @book.loans.where(returned_on: nil).last
@@ -114,7 +116,6 @@ class BooksController < ApplicationController
       return
     end
 
-    loan = @book.loans.where(returned_on: nil).last
 
     if loan.nil?
       redirect_to @book, alert: "This book is not currently borrowed!"
@@ -131,9 +132,10 @@ class BooksController < ApplicationController
 
     # Calculate penalty if book is overdue
     # days_overdue = (Time.current.to_date - loan.due_date.to_date).to_i
-    days_overdue = 4
+    days_overdue = [ 0, (loan.returned_on.to_date - loan.due_date.to_date).to_i ].max
     if days_overdue > 0
-      penalty_amount = (days_overdue * 0.50).round(2)
+      penalty_rate = 0.50
+      penalty_amount = (days_overdue * penalty_rate).round(2)
       # SIMULATED: the penalty is added to user's financial account
       notice = "Book has been successfully returned! A penalty of $#{penalty_amount} has been added to your(#{loan.borrower_name}) account."
     else
@@ -160,6 +162,6 @@ class BooksController < ApplicationController
 
   # trusted parameters
   def book_params
-    params.expect(book: [:title, :author, :description, :isbn, :image_url])
+    params.expect(book: [ :title, :author, :description, :isbn, :image_url ])
   end
 end
