@@ -4,6 +4,7 @@ Rails.application.routes.draw do
       post :borrow
       get :return
       patch :return
+      post :subscribe
     end
   end
 

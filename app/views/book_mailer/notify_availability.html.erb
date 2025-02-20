@@ -1,0 +1,7 @@
+<h1> <span class="text-indigo-600"><%= @book.title %></span> is now available!</h1>
+<p>
+  The book you subscribed to, <strong class="text-indigo-600"><%= @book.title %></strong>, has been returned and is now available for borrowing.
+</p>
+<p>
+  Visit the library to borrow it: <span class="text-indigo-600 text-decoration-underline"> <%= book_url(@book) %></span>
+</p>
