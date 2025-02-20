@@ -1,49 +1,62 @@
 <!-- Header -->
-<div class="row">
-  <div class="col-12">
-    <h1 class="mb-4">Library Books</h1>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="py-8">
+    <h1 class="text-3xl font-bold text-gray-900">Library Books</h1>
   </div>
-</div>
 
-<!--Search Input-->
-<%= render 'search_form' %>
+  <!--Search Input-->
+  <%= render 'search_form' %>
 
-<!--Cards-->
-<div class="row row-cols-1 row-cols-md-3 g-4">
-  <% @books.each do |book| %>
-    <div class="col">
-      <div class="card h-100">
-        <div class="card-body">
-          <h5 class="card-title"><%= book.title %></h5>
-          <h6 class="card-subtitle mb-2 text-muted"><%= book.author %></h6>
-          <p class="card-text"><%= book.description %></p>
-
-          <% if book.currently_borrowed? %>
-            <div class="book-status borrowed">
-              <i class="bi bi-bookmark-x"></i> Currently Borrowed
-            </div>
+  <!--Cards Grid-->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <% @books.each do |book| %>
+      <div class="w-72 h-96 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden">
+        <!-- Image Container -->
+        <div class="w-full h-48 overflow-hidden bg-gray-200 dark:bg-gray-700">
+          <% if book.image_url.present? %>
+            <%= image_tag book.image_url, class: "w-full h-full object-cover" %>
           <% else %>
-            <div class="book-status available">
-              <i class="bi bi-bookmark-check"></i> Available
+            <div class="w-full h-full flex items-center justify-center text-gray-400 dark:text-gray-500">
+              <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
             </div>
           <% end %>
+        </div>
 
-          <div class="mt-3">
-            <%= link_to book_path(book), class: "btn btn-primary" do %>
-              <i class="bi bi-eye"></i> View Details
+        <!-- Content Container -->
+        <div class="p-4">
+          <h3 class="text-lg font-semibold text-gray-800 dark:text-white truncate"><%= book.title %></h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400 mb-2"><%= book.author %></p>
+          <p class="text-sm text-gray-700 dark:text-gray-300 line-clamp-2 mb-4"><%= book.description %></p>
+
+          <!-- Status Badge -->
+          <div class="<%= book.currently_borrowed? ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' %> inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium">
+            <div class="<%= book.currently_borrowed? ? 'bg-red-400' : 'bg-green-400' %> w-2 h-2 rounded-full mr-1.5"></div>
+            <%= book.currently_borrowed? ? 'Borrowed' : 'Available' %>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="mt-4 flex space-x-2">
+            <%= link_to book_path(book), class: "flex-1 inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-600" do %>
+              View Details
             <% end %>
-            <%= link_to edit_book_path(book), class: "btn btn-outline-primary" do %>
-              <i class="bi bi-pencil"></i> Edit
+            <%= link_to edit_book_path(book), class: "inline-flex justify-center items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" do %>
+              Edit
             <% end %>
           </div>
         </div>
       </div>
-    </div>
-  <% end %>
-</div>
+    <% end %>
+  </div>
 
-<div class="mt-4">
-  <%= link_to new_book_path, class: "btn btn-success" do %>
-    <i class="bi bi-plus-lg"></i> Add New Book
-  <% end %>
+  <div class="mt-8">
+    <%= link_to new_book_path,
+                class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" do %>
+      <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+      </svg>
+      Add New Book
+    <% end %>
+  </div>
 </div>
