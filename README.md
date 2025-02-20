@@ -136,7 +136,7 @@ To run tests for a specific model or controller:
 3. Make your changes.
 4. Run tests:
    ```sh
-   rspec
+   ./bin/rails test
    ```
 5. Commit and push:
    ```sh
