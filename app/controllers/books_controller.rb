@@ -80,6 +80,17 @@ class BooksController < ApplicationController
     end
   end
 
+  def subscribe
+    @book = set_book
+    subscriber = @book.subscribers.build(email: params[:email])
+
+    if subscriber.save
+      redirect_to @book, notice: "You will receive a notification once book is returned!"
+    else
+      redirect_to @book, alert: subscriber.errors.full_messages.to_sentence
+    end
+  end
+
   # Book LOANs
   def borrow
     @book = set_book
@@ -140,6 +151,7 @@ class BooksController < ApplicationController
     end
 
     if loan.save
+      @book.notify_subscribers if @book.subscribers.any?
       redirect_to books_path, notice: notice
     else
       redirect_to return_book_path(@book), alert: loan.errors.full_messages.to_sentence
