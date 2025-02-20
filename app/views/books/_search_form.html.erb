@@ -4,7 +4,7 @@
     <div class="flex-1">
       <%= text_field_tag :search_query, params[:search_query],
                          placeholder: "Search by title or author...",
-                         class: "block p-3 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm" %>
+                         class: "block p-3 w-full bg-white rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm" %>
       <% if params[:search_query].present? %>
       <% end %>
     </div>

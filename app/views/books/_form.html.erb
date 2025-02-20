@@ -1,48 +1,63 @@
-<%= form_with(model: book) do |form| %>
-  <% if book.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(book.errors.count, "error") %> prohibited this book from being saved:</h2>
+<div class="max-w-3xl mx-auto">
+  <%= form_with(model: book, class: "space-y-8 bg-indigo-100 dark:bg-stone-600 rounded p-4 px-8") do |form| %>
+    <% if book.errors.any? %>
+      <div class="rounded-md bg-red-50 dark:bg-red-900/50 p-4 ring-1 ring-red-400 dark:ring-red-500">
+        <div class="flex">
+          <div class="ml-3">
+            <h3 class="text-sm font-medium text-red-800 dark:text-red-200">
+              <%= pluralize(book.errors.count, "error") %> prohibited this book from being saved:
+            </h3>
+            <div class="mt-2 text-sm text-red-700 dark:text-red-300">
+              <ul class="list-disc pl-5 space-y-1">
+                <% book.errors.each do |error| %>
+                  <li><%= error.full_message %></li>
+                <% end %>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
 
-      <ul>
-        <% book.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+    <div>
+      <%= form.label :title, class: "block text-sm font-medium text-gray-700 dark:text-gray-200" %>
+      <div class="mt-2">
+        <%= form.text_field :title, class: "block bg-white p-3 w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white sm:text-sm" %>
+      </div>
+    </div>
+
+    <div>
+      <%= form.label :isbn, class: "block text-sm font-medium text-gray-700 dark:text-gray-200" %>
+      <div class="mt-2">
+        <%= form.text_field :isbn, class: "block bg-white p-3 w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white sm:text-sm" %>
+      </div>
+    </div>
+
+    <div>
+      <%= form.label :author, class: "block text-sm font-medium text-gray-700 dark:text-gray-200" %>
+      <div class="mt-2">
+        <%= form.text_field :author, class: "block bg-white p-3 w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white sm:text-sm" %>
+      </div>
+    </div>
+
+
+    <div>
+      <%= form.label :description, class: "block text-sm font-medium text-gray-700 dark:text-gray-200" %>
+      <div class="mt-2">
+        <%= form.text_area :description, rows: 5, class: "block bg-white  p-2 w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white sm:text-sm" %>
+      </div>
+    </div>
+
+    <div>
+      <%= form.label :imagecover, class: "block text-sm font-medium text-gray-700 dark:text-gray-200" %>
+      <div class="mt-2">
+        <%= form.file_field :image, class: "block w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 cursor-pointer transition" %>
+      </div>
+    </div>
+
+    <div class="flex justify-end gap-4">
+      <%= link_to 'Cancel', books_path, class: "inline-flex items-center rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-100 dark:ring-gray-700 dark:hover:bg-gray-700 transition" %>
+      <%= form.submit class: "inline-flex items-center rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition" %>
     </div>
   <% end %>
-
-  <div>
-    <%= form.label :title, style: "display: block" %>
-    <%= form.text_field :title , required: true %>
-  </div>
-
-  <div>
-    <%= form.label :author, style: "display: block" %>
-    <%= form.text_field :author , required: true %>
-  </div>
-
-  <div>
-    <%= form.label :description, style: "display: block" %>
-    <%= form.textarea :description , required: true %>
-  </div>
-
-  <div>
-    <%= form.label :isbn %>
-    <%= form.text_field :isbn, required: true %>
-  </div>
-
-<!--  <div>-->
-    <%#= form.label :image_url %>
-    <%#= form.text_field :image_url, required: true %>
-<!--  </div>-->
-
-
-  <div>
-    <%= form.label :image %>
-    <%= form.file_field :image %>
-  </div>
-
-  <div>
-    <%= form.submit %>
-  </div>
-<% end %>
+</div>
