@@ -1,0 +1,118 @@
+<div class="bg-white dark:bg-gray-800 shadow sm:rounded-lg lg:mx-20">
+  <div class="px-4 py-5 sm:px-6 border-b border-gray-200 dark:border-gray-700">
+    <h3 class="text-2xl font-semibold leading-6 text-gray-900 dark:text-white"><%= @book.title %></h3>
+    <p class="mt-1 max-w-2xl text-sm text-indigo-600 dark:text-indigo-400">ISBN: <%= @book.isbn %></p>
+  </div>
+
+  <div class="flex flex-col lg:flex-row">
+    <div class="w-full lg:w-1/3 p-6">
+      <div class="mb-8">
+        <% if @book.image_url.present? %>
+          <%= image_tag @book.image_url, class: "w-full h-auto rounded-lg shadow-md" %>
+        <% else %>
+          <div class="w-full aspect-[3/4] bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+            <svg class="h-24 w-24 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+            </svg>
+          </div>
+        <% end %>
+      </div>
+      <!--      Action buttons-->
+      <div>
+        <div class="mt-8 flex flex-wrap items-center gap-4 sm:gap-6">
+          <%= link_to edit_book_path(@book), class: "inline-flex items-center rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition" do %>
+            <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M5.433 13.917l1.262-3.155A4 4 0 017.58 9.42l6.92-6.918a2.121 2.121 0 013 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 01-.65-.65z" />
+            </svg>
+            Edit Book
+          <% end %>
+
+          <%= button_to book_path(@book),
+                        method: :delete,
+                        class: "inline-flex items-center rounded-md bg-red-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 transition",
+                        form: { data: { turbo_confirm: "Are you sure you want to delete #{@book.title}?" } } do %>
+            <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z" clip-rule="evenodd" />
+            </svg>
+            Delete Book
+          <% end %>
+
+          <%= link_to books_path, class: "inline-flex items-center rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-100 dark:ring-gray-700 dark:hover:bg-gray-700 transition" do %>
+            <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clip-rule="evenodd" /> 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clip-rule="evenodd" />
+            </svg>
+            Back to Books
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="w-full lg:w-2/3 p-6">
+      <div class="prose dark:prose-invert max-w-none prose-headings:text-gray-900 dark:prose-headings:text-white prose-p:text-gray-600 dark:prose-p:text-gray-300">
+        <h4 class="text-lg font-medium text-gray-900 dark:text-white">Description</h4>
+        <p class="mt-2 text-gray-600 dark:text-gray-300"><%= @book.description %></p>
+      </div>
+
+      <!-- Borrowing Form -->
+      <% unless @book.currently_borrowed? %>
+        <div class="mt-8 bg-gray-50 dark:bg-gray-700 p-6 rounded-lg shadow-sm border border-gray">
+          <h4 class="text-lg font-medium text-gray-900 dark:text-white">Borrow this book</h4>
+          <%= form_tag borrow_book_path(@book), method: :post, class: "mt-4" do %>
+            <div class="mb-4">
+              <%= label_tag :borrower_name, "Your Name", class: "block bg-white dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-300" %>
+              <%= text_field_tag :borrower_name, nil, class: "mt-1 p-3 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300", required: true %>
+            </div>
+            <%= submit_tag "Borrow Book", class: "inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition" %>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="mt-8 bg-gray-50 dark:bg-gray-700 p-6 rounded-lg border shadow-sm">
+          <h4 class="text-lg font-medium text-gray-900 dark:text-white">Notify me when available</h4>
+          <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">
+            This book is currently borrowed. Enter your email to be notified when it's returned.
+            <br>
+            <!--            <small><%#= @book.subscribers.count %> people are already waiting.</small>-->
+            <small>3 people are already waiting.</small>
+          </p>
+          <%= form_tag return_book_path(@book), method: :post, class: "mt-4" do %>
+            <div class="mb-4">
+              <%= label_tag :email, "Your Email", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+              <%= email_field_tag :email, nil, placeholder: "gabriel@gmail.com", class: "mt-1 p-3 bg-white dark:bg-gray-700 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300", required: true %>
+            </div>
+            <%= submit_tag "Subscribe", class: "inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition" %>
+          <% end %>
+        </div>
+      <% end %>
+
+      <!-- Borrowing History -->
+      <div class="mt-8">
+        <h4 class="text-lg font-medium text-gray-900 dark:text-white">Borrowing History</h4>
+        <% if @loans.any? %>
+          <div class="mt-4 space-y-4">
+            <% @loans.each do |loan| %>
+              <div class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-sm">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p class="text-sm font-medium text-gray-900 dark:text-white"><%= loan.borrower_name %></p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                      Borrowed: <%= loan.borrowed_on.strftime("%B %d, %Y") %>
+                      <% if loan.returned_on %>
+                        | Returned: <%= loan.returned_on.strftime("%B %d, %Y") %>
+                      <% else %>
+                        | <span class="text-indigo-600 dark:text-indigo-400">Currently borrowed</span>
+                      <% end %>
+                    </p>
+                  </div>
+                  <% if @book.currently_borrowed? && loan == @loans.first %>
+                    <%= link_to "Return Book", return_book_path(@book), class: "inline-flex items-center rounded-md bg-green-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 transition" %>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">No loan history available.</p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,50 @@
+<%= content_for :title, "Borrower History - #{@borrower_name}" %>
+
+<div class="container mx-auto p-4 dark:bg-gray-800 dark:text-white">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-2xl font-bold dark:text-white">Borrowing History for <%= @borrower_name %></h2>
+    <%= link_to loans_path, class: "bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-md dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white" do %>
+      <i class="fas fa-arrow-left mr-2"></i> Back to Loans
+    <% end %>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <% @loans.each do |loan| %>
+      <div class="bg-white rounded-lg shadow p-4 h-full dark:bg-gray-700">
+        <div class="mb-2">
+          <h5 class="text-lg font-medium text-blue-500 hover:underline dark:text-blue-400"><%= link_to loan.book.title, book_path(loan.book) %></h5>
+        </div>
+        <div>
+          <p class="text-gray-600 mb-1 dark:text-gray-400">
+            <i class="far fa-calendar-alt text-gray-400 mr-2 dark:text-gray-500"></i>
+            <strong>Borrowed:</strong> <%= loan.borrowed_on.strftime("%B %d, %Y") %>
+          </p>
+          <% if loan.book.author.present? %>
+            <p class="text-gray-600 mb-1 dark:text-gray-400">
+              <i class="fas fa-user-edit text-gray-400 mr-2 dark:text-gray-500"></i>
+              <strong>Author:</strong> <%= loan.book.author %>
+            </p>
+          <% end %>
+
+          <div class="mt-6">
+            <% if loan.returned_on.present? %>
+              <div class="bg-green-100 text-green-800 px-2 py-1 rounded-md dark:bg-green-200 dark:text-green-900">
+                <i class="fas fa-check-circle mr-2"></i>
+                Returned on </br> <%= loan.returned_on.strftime("%B %d, %Y") %>
+              </div>
+            <% else %>
+              <div class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-md dark:bg-yellow-200 dark:text-yellow-900">
+                <i class="fas fa-clock"></i>
+                Currently Borrowed
+              </div>
+              <p class="text-gray-600 mb-1 dark:text-gray-400">
+              <i class="far fa-calendar-alt text-gray-400 mr-2 dark:text-gray-500"></i>
+              <strong>Due:</strong> <%= loan.due_date.strftime("%B %d, %Y") %>
+            </p>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+    <% end %>
+    </div>
