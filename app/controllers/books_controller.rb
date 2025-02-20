@@ -7,17 +7,15 @@ class BooksController < ApplicationController
   def index
     # send a flash message if no match found with given search query
     @books = if params[:search_query].present?
-               books = Book.where("lower(title) LIKE ? OR lower(author) LIKE ?",
-                                  "%#{params[:search_query].downcase}%",
-                                  "%#{params[:search_query].downcase}%")
-
+               books = Book.where("title ILIKE :query OR author ILIKE :query", query: "%#{params[:search_query]}%")
                if books.empty?
                  flash[:alert] = "No books/author found matching '#{params[:search_query]}'"
                end
+
                books
     else
                Book.all
-    end
+             end
   end
 
   # GET /books/1 or /books/1.json
@@ -95,7 +93,7 @@ class BooksController < ApplicationController
     loan = @book.loans.build(
       borrower_name: params[:borrower_name],
       borrowed_on: Time.current,
-      due_date: params[:due_date] || 14.days.from_now
+      due_date: params[:due_date] || 14.days.from_now.to_date
     )
 
     if loan.save
@@ -111,11 +109,10 @@ class BooksController < ApplicationController
     loan = @book.loans.where(returned_on: nil).last
 
     if params[:returner_name].blank?
-      @loan = @book.loans.where(returned_on: nil).last
+      # @loan = @book.loans.where(returned_on: nil).last
       render :return
       return
     end
-
 
     if loan.nil?
       redirect_to @book, alert: "This book is not currently borrowed!"
@@ -132,7 +129,7 @@ class BooksController < ApplicationController
 
     # Calculate penalty if book is overdue
     # days_overdue = (Time.current.to_date - loan.due_date.to_date).to_i
-    days_overdue = [ 0, (loan.returned_on.to_date - loan.due_date.to_date).to_i ].max
+    days_overdue = [0, (loan.returned_on.to_date - loan.due_date.to_date).to_i].max
     if days_overdue > 0
       penalty_rate = 0.50
       penalty_amount = (days_overdue * penalty_rate).round(2)
@@ -162,6 +159,6 @@ class BooksController < ApplicationController
 
   # trusted parameters
   def book_params
-    params.expect(book: [ :title, :author, :description, :isbn, :image_url ])
+    params.expect(book: [:title, :author, :description, :isbn, :image_url])
   end
 end
