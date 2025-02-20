@@ -15,4 +15,10 @@ class Book < ApplicationRecord
     response = Cloudinary::Uploader.upload(file, public_id: "books/#{isbn}")
     self.image_url = response["secure_url"]
   end
+
+  def notify_subscribers
+    subscribers.each do |subscriber|
+      BookMailer.with(user: subscriber, book: self).new_book_email.deliver_later
+    end
+  end
 end
