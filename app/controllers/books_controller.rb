@@ -85,7 +85,7 @@ class BooksController < ApplicationController
     subscriber = @book.subscribers.build(email: params[:email])
 
     if subscriber.save
-      redirect_to @book, notice: "You will receive notifications once book is returned!"
+      redirect_to @book, notice: "You will receive a notification once book is returned!"
     else
       redirect_to @book, alert: subscriber.errors.full_messages.to_sentence
     end

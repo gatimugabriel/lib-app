@@ -1,5 +1,6 @@
 class Book < ApplicationRecord
   has_many :loans, dependent: :destroy
+  has_many :subscribers, dependent: :destroy
   validates :title, :author, :isbn, :description, presence: true
   validates :isbn, uniqueness: true
   validates :image_url, presence: true, format: { with: URI::DEFAULT_PARSER.make_regexp(%w[http https]), message: "must be a valid URL" }
@@ -18,7 +19,8 @@ class Book < ApplicationRecord
 
   def notify_subscribers
     subscribers.each do |subscriber|
-      BookMailer.with(user: subscriber, book: self).new_book_email.deliver_later
+      BookMailer.notify_availability(subscriber.email, self).deliver_now
     end
+    subscribers.destroy_all
   end
 end
