@@ -23,7 +23,7 @@ This application is built using Ruby on Rails
     - [Step 1: Clone the Repository](#step-1-clone-the-repository)
     - [Step 2: Install Dependencies](#step-2-install-dependencies)
     - [Step 3: Configure Environment Variables](#step-3-configure-environment-variables)
-    - [Step 4: Configure Database](#step-4-configure-database)
+    - [Step 4: Database Setup](#step-4-database-setup)
     - [Step 5: Start the Rails Server](#step-5-start-the-rails-server)
 - [Tests](#tests)
     - [Running Tests](#running-tests)
@@ -75,12 +75,9 @@ bundle install
 ```
 
 ### Step 3: Configure Environment Variables
+Create a ```.env``` file in project root, then checkout [this example](/env.example) for what variables you need to populate it with
 
-
-### Step 4: Configure Database
-PostgreSQL is used
-
-
+### Step 4: Database Setup
 Then, create and migrate the database:
 ```sh
 rails db:create db:migrate
@@ -130,7 +127,7 @@ To run tests for a specific model or controller:
 
 
 # Contributing
-### 🛠️ How to Contribute
+### How to Contribute
 1. Fork the repo.
 2. Create a feature branch:
    ```sh
