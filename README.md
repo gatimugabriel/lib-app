@@ -127,7 +127,7 @@ To run tests for a specific model or controller:
 
 
 # Contributing
-### 🛠️ How to Contribute
+### How to Contribute
 1. Fork the repo.
 2. Create a feature branch:
    ```sh
