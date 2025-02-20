@@ -10,7 +10,7 @@
       <%= form_tag return_book_path(@book), method: :patch, class: "space-y-6" do %>
         <div>
           <%= label_tag :returner_name, "Your Name", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
-          <%= text_field_tag :returner_name, nil, class: "mt-1 p-3 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300", required: true %>
+          <%= text_field_tag :returner_name, nil, placeholder: "e.g James", class: "mt-1 p-3 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-700 dark:text-gray-300", required: true %>
         </div>
 
         <% if @book.currently_borrowed? %>
