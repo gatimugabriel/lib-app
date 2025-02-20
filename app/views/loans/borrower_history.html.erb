@@ -26,21 +26,25 @@
             </p>
           <% end %>
 
-          <div class="mt-2">
+          <div class="mt-6">
             <% if loan.returned_on.present? %>
               <div class="bg-green-100 text-green-800 px-2 py-1 rounded-md dark:bg-green-200 dark:text-green-900">
                 <i class="fas fa-check-circle mr-2"></i>
-                Returned on <%= loan.returned_on.strftime("%B %d, %Y") %>
+                Returned on </br> <%= loan.returned_on.strftime("%B %d, %Y") %>
               </div>
             <% else %>
               <div class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-md dark:bg-yellow-200 dark:text-yellow-900">
                 <i class="fas fa-clock"></i>
                 Currently Borrowed
               </div>
+              <p class="text-gray-600 mb-1 dark:text-gray-400">
+              <i class="far fa-calendar-alt text-gray-400 mr-2 dark:text-gray-500"></i>
+              <strong>Due:</strong> <%= loan.due_date.strftime("%B %d, %Y") %>
+            </p>
             <% end %>
           </div>
         </div>
       </div>
-      </div>
-      </div>
+
     <% end %>
+    </div>
