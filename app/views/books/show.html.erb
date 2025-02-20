@@ -55,8 +55,8 @@
       </div>
 
       <!-- Borrowing Form -->
-      <% unless @book.currently_borrowed? %>
-        <div class="mt-8 bg-gray-50 dark:bg-gray-700 p-6 rounded-lg shadow-sm border border-gray">
+      <div class="mt-8 bg-gray-50 dark:bg-gray-700 p-6 rounded-lg shadow-sm border border-gray-400 dark:border-gray-500">
+        <% unless @book.currently_borrowed? %>
           <h4 class="text-lg font-medium text-gray-900 dark:text-white">Borrow this book</h4>
           <%= form_tag borrow_book_path(@book), method: :post, class: "mt-4" do %>
             <div class="mb-4">
@@ -65,41 +65,47 @@
             </div>
             <%= submit_tag "Borrow Book", class: "inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition" %>
           <% end %>
-        </div>
 
-        <!--        Notification Form     -->
-      <% else %>
-        <div class="mt-8 bg-gray-50 dark:bg-gray-700 p-6 rounded-lg border border-gray-300 shadow-sm">
+          <!--        Notification Form     -->
+        <% else %>
           <h4 class="text-lg font-medium text-gray-900 dark:text-white">Notify me when available</h4>
           <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">
             This book is currently borrowed. Enter your email to be notified when it's returned.
             <br>
-            <small><%= @book.subscribers.count %> people are already waiting.</small>
+            <small> <span class="text-green-600 font-bold"><%= @book.subscribers.count %></span>
+              <% if @book.subscribers.count == 1 %>
+                <span>person is also waiting</span>
+              <% else %>
+                people are also waiting.
+              <% end %>
+            </small>
           </p>
           <%= form_tag subscribe_book_path(@book), method: :post, class: "mt-4" do %>
             <div class="mb-4">
               <%= label_tag :email, "Your Email", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
               <%= email_field_tag :email, nil, placeholder: "gabriel@gmail.com", class: "mt-1 p-3 bg-white dark:bg-gray-700 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300", required: true %>
-
-              <%= email_field_tag :email, nil, class: "form-control", required: true %>
-
-
             </div>
             <%= submit_tag "Subscribe", class: "inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition" %>
           <% end %>
-        </div>
-      <% end %>
+        <% end %>
+      </div>
 
       <!-- Borrowing History -->
+
       <div class="mt-8">
+
         <h4 class="text-lg font-medium text-gray-900 dark:text-white">Borrowing History</h4>
         <% if @loans.any? %>
+
           <div class="mt-4 space-y-4">
             <% @loans.each do |loan| %>
+
               <div class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-sm">
                 <div class="flex items-center justify-between">
                   <div>
-                    <p class="text-sm font-medium text-gray-900 dark:text-white"><%= loan.borrower_name %></p>
+                    <p class="text-sm font-medium text-gray-900 dark:text-white hover:text-indigo-400 hover:text-underline transition">
+                      <%= link_to loan.borrower_name, borrower_history_path(borrower_name: loan.borrower_name) %>
+                    </p>
                     <p class="text-sm text-gray-500 dark:text-gray-400">
                       Borrowed: <%= loan.borrowed_on.strftime("%B %d, %Y") %>
                       <% if loan.returned_on %>
