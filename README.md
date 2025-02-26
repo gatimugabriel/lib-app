@@ -89,12 +89,16 @@ rails db:seed
 ```
 
 ### Step 5: Start the Rails Server
+For development with Tailwind CSS support:
+
 ```sh
   ./bin/dev
 ```
-This compiles tailwind (You can leave it at this point(enough to run the application), but if you like running ```rails server``` run ``` ./bin/dev``` first then rails server)
+This command starts both the Rails server and the Tailwind CSS compilation process.
+Alternatively, if you just want to run the Rails server without the Tailwind watcher:
 ```sh
-rails server 
+rails tailwindcss:build  # Build Tailwind CSS assets first
+rails server             # Then start the server
 ```
 
 
