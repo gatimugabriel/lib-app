@@ -90,30 +90,19 @@ rails db:seed
 
 ### Step 5: Start the Rails Server
 ```sh
-rails server
+  ./bin/dev
 ```
+This compiles tailwind (You can leave it at this point(enough to run the application), but if you like running ```rails server``` run ``` ./bin/dev``` first then rails server)
+```sh
+rails server 
+```
+
+
 Visit `http://localhost:3000` in your browser.
 
 
 
 # Tests
-<!-- This project includes **RSpec tests** for models and controllers.
-
-### Step 1: Install RSpec
-```sh
-rails generate rspec:install
-```
-
-### Step 2: Run the Tests
-```sh
-rspec
-```
-
-To run tests for a specific model or controller:
-```sh
-rspec spec/models/book_spec.rb
-rspec spec/controllers/books_controller_spec.rb
-``` -->
 
 ### Running Tests
 ```sh
